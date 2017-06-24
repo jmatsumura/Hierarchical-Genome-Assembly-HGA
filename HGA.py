@@ -6,6 +6,7 @@ import ntpath
 import sys
 import os
 import fileinput
+import math
 
 
 help_menue = "\nHierarchical Genome Assembly version 1.0.0\n" + \
@@ -179,10 +180,12 @@ def run_command(parm):
 		if selected_part_assem == "SPAdes":
 			for p in range(1, num_parts + 1):
 				os.system("mkdir " + out_path + "part_" + str(p) + "_assembly")
+
+				m = int(math.ceil(float(t) * .512)) # calculate in GB how much to request based on number of threads
 				
 				print "Partition " + str(p) + " assembly started"
 				os.popen("echo ===========HGA====== Partition " + str(p) + " assembly started | tee -a " + out_path +  "HGA.log").read()
-				os.popen(spades_path + "/spades.py -t " + t + " -k " + p_kmer + " --12 " + out_path + "/" + ntpath.basename(partitions_fastq_file)[:-5] + "_part_" + str(p) +".fastq" + " -o " + out_path + "part_" + str(p) + "_assembly | tee -a " + out_path +  "HGA.log").read()
+				os.popen(spades_path + "/spades.py -t " + t + " -m " + m + " -k " + p_kmer + " --12 " + out_path + "/" + ntpath.basename(partitions_fastq_file)[:-5] + "_part_" + str(p) +".fastq" + " -o " + out_path + "part_" + str(p) + "_assembly | tee -a " + out_path +  "HGA.log").read()
 
 		
 		if selected_part_assem == "velvet":
