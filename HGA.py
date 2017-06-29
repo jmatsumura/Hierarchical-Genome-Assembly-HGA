@@ -21,6 +21,7 @@ help_menue = "\nHierarchical Genome Assembly version 1.0.0\n" + \
 " -P       int       number of partitions\n" + \
 " -Pkmer   int(odd)  kmer value for assembling the partitions\n" + \
 " -Rkmer   int(odd)  kmer value for re-assembly step \n" + \
+" -m   int  memory to use, in GB, for SPAdes \n" + \
 " -t       int       number of threads to be used for re-assembly step using SPAdes assembler, default 1.\n" + \
 " -out     Path      output path\n" + \
 " -h                 print option menue\n" 
@@ -157,6 +158,7 @@ def run_command(parm):
 			t = "1"
 
 		insert_size  = parm[parm.index("-ins") + 1]
+		m  = parm[parm.index("-m") + 1]
 		std  = parm[parm.index("-std") + 1]
 		num_parts = int(parm[parm.index("-P") + 1])
 		p_kmer = parm[parm.index("-Pkmer") + 1]
@@ -178,8 +180,6 @@ def run_command(parm):
 		if selected_part_assem == "SPAdes":
 			for p in range(1, num_parts + 1):
 				os.system("mkdir " + out_path + "part_" + str(p) + "_assembly")
-
-				m = int(int(t) * 3) # calculate in GB how much to request based on number of threads
 				
 				print "Partition " + str(p) + " assembly started"
 				os.popen("echo ===========HGA====== Partition " + str(p) + " assembly started | tee -a " + out_path +  "HGA.log").read()
